@@ -12,16 +12,18 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <script src="out/script.js" defer></script>
+    <script src="https://unpkg.com/mustache@latest"></script>
+    <script src="src/script.js"></script>
+    <script src="src/deferred.js" defer></script>
   </head>
-  <body>
+  <body onload="render()">
     <header>
-      <h1>E-Commerce Demo</h1>
+      <h1 class="localized">{{title}}</h1>
       <nav>
-        <ul>
-          <li><a id="nav-home" href="index.html">Home</a></li>
-          <li><a id="nav-products" href="products.html">Products</a></li>
-          <li><a id="nav-about" href="about.html">About</a></li>
+        <ul class="localized">
+          <li><a id="nav-home" href="index.html">{{home}}</a></li>
+          <li><a id="nav-products" href="products.html">{{products}}</a></li>
+          <li><a id="nav-about" href="about.html">{{about}}</a></li>
         </ul>
         <div class="settings">
           <select id="language-select">
@@ -37,15 +39,15 @@
     </header>
 
     <main>
-      <section class="hero">
-        <h2>Welcome to Our Store</h2>
+      <section class="hero localized">
+        <h2>{{welcomeMessage}}</h2>
         <p>Discover amazing products at great prices!</p>
-        <a href="products.html" class="btn">Shop Now</a>
+        <a href="products.html" class="btn">{{shopNow}}</a>
       </section>
     </main>
 
     <footer>
-      <p>&copy; 2025 Development of Interactive Systems Course.</p>
+      <p class="localized">{{footerText}}</p>
     </footer>
   </body>
 </html>
