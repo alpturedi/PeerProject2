@@ -1,16 +1,44 @@
 var template = [];
-const FALLBACK_LANGUAGE = "fr";
+const FALLBACK_LANGUAGE = "en";
 
 var langJson = {};
+var firstBatch = [];
+var secondBatch = [];
+
+//Initial Setup
+const initialTheme = localStorage.getItem("theme");
+const initialLanguage = localStorage.getItem("language") ?? FALLBACK_LANGUAGE;
 
 (async () => {
   const response = await fetch("./lang.json");
   langJson = await response.json();
 })();
 
-//Initial Setup
-const initialTheme = localStorage.getItem("theme");
-const initialLanguage = localStorage.getItem("language") ?? FALLBACK_LANGUAGE;
+(async () => {
+  if (window?.location?.pathname === "/products.html") {
+    firstBatch = await (await fetch("https://dummyjson.com/products?limit=9")).json();
+    const productsContainer = document.querySelector(".product-grid ");
+    console.log("¡ ⛰️ ~ firstBatch⛰️ !", firstBatch, productsContainer);
+
+    if (productsContainer) {
+      firstBatch?.products?.forEach((product) => {
+        const productCard = document.createElement("div");
+        productCard.classList.add("product-card");
+        productCard.innerHTML = `
+          <div class="card" key="${product.id}">
+            <img src="${product?.images?.[0]}" alt="${product?.title}" />
+            <h3>${product?.title}</h3>
+            <p>${product?.price}</p>
+            <button>${langJson?.[initialLanguage]?.addToCart}</button>
+          </div>`;
+        productsContainer.appendChild(productCard);
+      });
+    } else {
+      console.log("Mutation obscerver not working, implement the logic here");
+    }
+    secondBatch = await (await fetch("https://dummyjson.com/products?limit=9&skip=9")).json();
+  }
+})();
 
 function render() {
   const currentLanguage = localStorage.getItem("language") ?? FALLBACK_LANGUAGE;
