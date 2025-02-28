@@ -116,11 +116,15 @@ footer {
 
 .card img {
   max-width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
   border-radius: 5px;
 }
 
 .card h3 {
   margin: 10px 0;
+  height: 2.2em;
+
 }
 
 .card p {
@@ -204,4 +208,24 @@ body.dark-mode {
 
 .localized:not(.rendered) * {
   color: transparent !important;
+}
+
+
+
+.pagination {
+  display: flex;
+  justify-content: center;
+
+}
+
+.pagination * {
+  color: #007bff;
+}
+
+.pagination li.disabled a {
+  color: #6c757d;
+}
+
+.pagination li.disabled i {
+  color: #6c757d;
 }
