@@ -9,7 +9,7 @@ const initialTheme = localStorage.getItem("theme");
 const initialLanguage = localStorage.getItem("language") ?? FALLBACK_LANGUAGE;
 
 (async () => {
-  const response = await fetch("../lang.json");
+  const response = await fetch("./lang.json");
   langJson = await response.json();
   console.log(langJson);
 })();
@@ -19,7 +19,7 @@ console.log(currentPage);
 let fetchedProducts = [];
 
 (async () => {
-  if (window?.location?.pathname === "/PeerProject2/products.html") {
+  if (window?.location?.pathname === "/products.html") {
     const { products, total } = await (
       await fetch(`https://dummyjson.com/products?limit=${PAGE_SIZE}&skip=${PAGE_SIZE * (currentPage - 1)}  `)
     ).json();
@@ -39,7 +39,7 @@ let fetchedProducts = [];
       if (currentPage > 1) {
         const firstPage = document.createElement("li");
         firstPage.classList.add("page-item");
-        firstPage.innerHTML = <a class="page-link" href="?page=1">1</a>;
+        firstPage.innerHTML = `<a class="page-link" href="?page=1">1</a>`;
         navContainer.appendChild(firstPage);
       }
 
@@ -52,7 +52,7 @@ let fetchedProducts = [];
       if (currentPage < lastPage) {
         const lastPageElement = document.createElement("li");
         lastPageElement.className = "page-item";
-        lastPageElement.innerHTML = <li class="page-item"><a class="page-link" href="?page=${lastPage}">${lastPage}</a></li>;
+        lastPageElement.innerHTML = `<li class="page-item"><a class="page-link" href="?page=${lastPage}">${lastPage}</a></li>`;
         navContainer.appendChild(lastPageElement);
 
         const nextPageElement = document.createElement("li");
