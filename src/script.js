@@ -7,7 +7,7 @@ var langJson = {};
 //Initial Setup
 const initialTheme = localStorage.getItem("theme");
 const initialLanguage = localStorage.getItem("language") ?? FALLBACK_LANGUAGE;
-
+const sortDirection = sessionStorage.getItem("sortDirection");
 (async () => {
   const response = await fetch("./lang.json");
   langJson = await response.json();
@@ -18,7 +18,9 @@ const currentPage = parseInt(window?.location?.search?.split("=")?.[1] ?? "1", 1
 (async () => {
   if (window?.location?.pathname === "/products.html") {
     const { products, total } = await (
-      await fetch(`https://dummyjson.com/products?limit=${PAGE_SIZE}&skip=${PAGE_SIZE * (currentPage - 1)}  `)
+      await fetch(
+        `https://dummyjson.com/products?limit=${PAGE_SIZE}&skip=${PAGE_SIZE * (currentPage - 1)}${sortDirection ? "&" + sortDirection : ""}`
+      )
     ).json();
     const productsContainer = document.querySelector(".product-grid ");
     const navContainer = document.querySelector("ul.pagination");
@@ -31,7 +33,7 @@ const currentPage = parseInt(window?.location?.search?.split("=")?.[1] ?? "1", 1
           <div class="card" key="${product.id}">
             <img src="${product?.images?.[0]}" alt="${product?.title}" />
             <h3>${product?.title}</h3>
-            <p>${product?.price}</p>
+           <p>&euro;${product?.price}</p>
             <button>${langJson?.[initialLanguage]?.addToCart}</button>
           </div>`;
         productsContainer.appendChild(productCard);
@@ -45,11 +47,11 @@ const currentPage = parseInt(window?.location?.search?.split("=")?.[1] ?? "1", 1
       if (currentPage > 1) {
         const firstPage = document.createElement("li");
         firstPage.classList.add("page-item");
-        firstPage.innerHTML = `<a class="page-link" href="?page=1">1</a>`;
+        firstPage.innerHTML = `<a class="page-item ${currentPage === 1 ? "current-page" : ""}" href="?page=1">1</a>`;
         navContainer.appendChild(firstPage);
       }
       const currentPageElement = document.createElement("li");
-      currentPageElement.className = "page-item";
+      currentPageElement.className = "page-item current-page";
       currentPageElement.innerHTML = currentPage.toString();
       navContainer.appendChild(currentPageElement);
 
@@ -94,4 +96,16 @@ function render() {
     item.classList.add("rendered");
     item.innerHTML = Mustache.render(template[index], chosenLang);
   });
+  const products = document.querySelectorAll(".product-card");
+  products.forEach((product) => {
+    product.querySelector("button").innerText = chosenLang.addToCart;
+  });
+
+  let priceSortSelector = document.querySelector("#price-sort");
+  priceSortSelector.value = sortDirection ?? "";
+  priceSortSelector?.addEventListener("change", (e) => {
+    sessionStorage.setItem("sortDirection", e.target.value);
+    location.reload();
+  });
 }
+
